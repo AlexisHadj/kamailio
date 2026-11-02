@@ -1570,10 +1570,14 @@ int tr_eval_string(
 				}
 			}
 
-			if(i == 0 || i >= val->rs.len) {
-				memcpy(_tr_buffer, val->rs.s, val->rs.len);
+			if(i < 0) {
+				break;
+			} else if(i == 0) {
+				/* Delimiter is at index 0: nothing before it */
+				_tr_buffer[0] = '\0';
+				val->rs.len = 0;
 			} else {
-				memcpy(_tr_buffer, val->rs.s, i);
+			memcpy(_tr_buffer, val->rs.s, i);
 				val->rs.len = i;
 			}
 			val->flags = PV_VAL_STR;
@@ -1620,7 +1624,7 @@ int tr_eval_string(
 				}
 			}
 
-			if(i == 0 || i >= val->rs.len) {
+			if(i >= val->rs.len) {
 				_tr_buffer[0] = '\0';
 				val->rs.len = 0;
 			} else {
